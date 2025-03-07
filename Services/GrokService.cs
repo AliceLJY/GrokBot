@@ -17,7 +17,7 @@ namespace GrokBot.Services
         {
             _httpClient = httpClient;
             
-            // In development, use local API, in production use Render.com API
+            // In development, use local API, in production use Render.com API with Docker
 #if DEBUG
             _apiUrl = "https://localhost:7001/api/grok/chat";
 #else
