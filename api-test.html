@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Connection Test</h1>
+    <p>Use this tool to test your backend API connection</p>
+    
+    <div class="form-group">
+        <label for="apiUrl">API URL:</label>
+        <input type="text" id="apiUrl" value="https://grokbot-backend.onrender.com" placeholder="Enter API base URL">
+    </div>
+    
+    <div class="form-group">
+        <label for="endpoint">Endpoint:</label>
+        <input type="text" id="endpoint" value="/api/health" placeholder="Enter endpoint (e.g. /api/values)">
+    </div>
+    
+    <div class="form-group">
+        <label for="method">HTTP Method:</label>
+        <select id="method">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+        </select>
+    </div>
+    
+    <div class="form-group" id="bodyContainer" style="display: none;">
+        <label for="requestBody">Request Body (JSON):</label>
+        <textarea id="requestBody" rows="5" style="width: 100%;" placeholder='{"key": "value"}'></textarea>
+    </div>
+    
+    <button onclick="testApi()">Test Connection</button>
+    
+    <div class="status" id="status"></div>
+    <pre id="response">Results will appear here...</pre>
+    
+    <script>
+        // Show/hide request body based on method
+        document.getElementById('method').addEventListener('change', function() {
+            document.getElementById('bodyContainer').style.display = 
+                this.value === 'POST' ? 'block' : 'none';
+        });
+        
+        // Test API connection
+        async function testApi() {
+            const apiUrl = document.getElementById('apiUrl').value.trim();
+            const endpoint = document.getElementById('endpoint').value.trim();
+            const method = document.getElementById('method').value;
+            const requestBody = document.getElementById('requestBody').value;
+            
+            const statusEl = document.getElementById('status');
+            const responseEl = document.getElementById('response');
+            
+            const url = apiUrl + (endpoint.startsWith('/') ? endpoint : '/' + endpoint);
+            
+            statusEl.className = '';
+            statusEl.textContent = 'Testing connection...';
+            responseEl.textContent = 'Waiting for response...';
+            
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                };
+                
+                if (method === 'POST') {
+                    options.headers['Content-Type'] = 'application/json';
+                    options.body = requestBody;
+                }
+                
+                const startTime = new Date();
+                const response = await fetch(url, options);
+                const endTime = new Date();
+                const timeTaken = endTime - startTime;
+                
+                let responseData;
+                let contentType = response.headers.get('content-type');
+                
+                if (contentType && contentType.includes('application/json')) {
+                    responseData = await response.json();
+                    responseData = JSON.stringify(responseData, null, 2);
+                } else {
+                    responseData = await response.text();
+                }
+                
+                if (response.ok) {
+                    statusEl.className = 'success';
+                    statusEl.textContent = `Success! Status: ${response.status} (${timeTaken}ms)`;
+                } else {
+                    statusEl.className = 'error';
+                    statusEl.textContent = `Error! Status: ${response.status} (${timeTaken}ms)`;
+                }
+                
+                responseEl.textContent = responseData;
+                
+            } catch (error) {
+                statusEl.className = 'error';
+                statusEl.textContent = `Connection failed: ${error.message}`;
+                responseEl.textContent = error.stack || error.message;
+            }
+        }
+    </script>
+</body>
+</html>
