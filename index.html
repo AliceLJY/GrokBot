@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>GrokBot</title>
+    <title>GrokBot - AI Powered Chat</title>
     <base href="/grokbot/" />
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
@@ -13,13 +13,27 @@
     
     <!-- 添加处理路由的脚本 -->
     <script type="text/javascript">
-        // 用于处理来自URL查询参数的路由重定向
+        // 检测当前环境
         (function() {
-            var path = window.location.search;
-            if (path && path.startsWith('?')) {
-                var route = path.substring(1);
+            var host = window.location.hostname;
+            var path = window.location.pathname;
+            var basePath = '/grokbot/';
+            
+            // 本地开发环境使用根目录作为基础路径
+            if (host.includes('localhost') || host.includes('127.0.0.1')) {
+                document.querySelector('base').setAttribute('href', '/');
+            } 
+            // GitHub Pages环境使用项目名作为基础路径
+            else if (host.includes('github.io')) {
+                document.querySelector('base').setAttribute('href', basePath);
+            }
+            
+            // 处理从URL查询参数中的路由重定向
+            var searchPath = window.location.search;
+            if (searchPath && searchPath.startsWith('?')) {
+                var route = searchPath.substring(1);
                 if (route && !route.startsWith('?')) {
-                    history.replaceState(null, '', route);
+                    history.replaceState(null, '', (host.includes('localhost') ? '/' : basePath) + route);
                 }
             }
         })();
@@ -27,21 +41,50 @@
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column;">
+            <h1>GrokBot</h1>
+            <p>Loading application...</p>
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="_framework/blazor.webassembly.js"></script>
+    
     <script>
+        // 监听错误并记录到控制台
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error('Global error:', message, 'at', source, lineno, colno, error);
+            return false;
+        };
+        
+        // 滚动到聊天窗口底部
         window.scrollToBottom = (element) => {
             if (element) {
                 element.scrollTop = element.scrollHeight;
             }
         };
+        
+        // 优化本地存储使用
+        window.clearStorage = () => {
+            try {
+                localStorage.clear();
+                sessionStorage.clear();
+                return true;
+            } catch (e) {
+                console.error('Failed to clear storage:', e);
+                return false;
+            }
+        };
     </script>
+    
+    <script src="_framework/blazor.webassembly.js"></script>
 </body>
 
 </html>
