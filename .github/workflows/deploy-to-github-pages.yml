@@ -15,9 +15,21 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.0.x'
+          
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
 
       - name: Publish
         run: dotnet publish -c Release -o release --nologo
+
+      - name: Verify wwwroot directory
+        run: |
+          ls -la release/wwwroot
+          echo "Checking important files:"
+          find release/wwwroot -type f | grep -v .ds_store
 
       - name: Change base-tag in index.html
         run: sed -i 's/<base href="\/" \/>/<base href="\/grokbot\/" \/>/g' release/wwwroot/index.html
