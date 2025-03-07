@@ -33,7 +33,7 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-ZuszQwa3MD7dlBKW64Ud8yQPEQ5fEtKWMBDvTr+JTnE=",
+      "hash": "sha256-Zzx\/94ggKBRfkYih+ZZvxbypeL0wY3BvKgyDM4RH32c=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -41,7 +41,7 @@
       "url": "_framework\/Blazored.LocalStorage.wasm"
     },
     {
-      "hash": "sha256-NWltTvG8+Uruvebs20o42Z\/iGK4Y4L6+1zKUD3KcDd0=",
+      "hash": "sha256-+6BKnALkSCp0MztN2mZ+A5r3dATIqo5L\/nEslTNlFds=",
       "url": "_framework\/GrokBot.wasm"
     },
     {
@@ -133,7 +133,7 @@
       "url": "_framework\/System.Net.Http.Json.wasm"
     },
     {
-      "hash": "sha256-RBRgRGAn5pUevIfGgf0ABKFmNQ3E7eFno0WbPaAPQrs=",
+      "hash": "sha256-YuTQ0DTaHfaUObLiixjzHzkrJEeLZSu5N+Cn1oH7rE8=",
       "url": "_framework\/System.Net.Http.wasm"
     },
     {
@@ -153,7 +153,7 @@
       "url": "_framework\/System.Runtime.InteropServices.JavaScript.wasm"
     },
     {
-      "hash": "sha256-UzvLSaPLfB5I\/h1r0I4y7XPudpjevWxEAyGBL+mUlFY=",
+      "hash": "sha256-EbHZU913UKwIetIeV+oQVoihl8rvJxJ\/8DBcUH\/RJ7c=",
       "url": "_framework\/System.Runtime.wasm"
     },
     {
@@ -217,5 +217,5 @@
       "url": "routes.json"
     }
   ],
-  "version": "Stm\/wWMp"
+  "version": "M\/2tu4yy"
 };

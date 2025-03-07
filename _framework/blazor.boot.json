@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "GrokBot",
   "resources": {
-    "hash": "sha256-hDFd9i9+fPXF6p2JvsqSOg+g55b1DkXpom1IPPTcgZM=",
+    "hash": "sha256-0GiwOAKioNj1qvWmTM3JP50dZjp2vgHqIhPPEbLj6Uk=",
     "jsModuleNative": {
       "dotnet.native.8.0.13.f1wj86lvfk.js": "sha256-xNQsYHtL1vcbrVTHDZAwJM4WovpoyjsrM2C6FQ8cW1w="
     },
@@ -18,7 +18,7 @@
     },
     "assembly": {
       "Blazored.LocalStorage.wasm": "sha256-xHBGFCMjDjvvTwtMvgaMBNmQk9JdVhGmws2/GMZlxrI=",
-      "GrokBot.wasm": "sha256-NWltTvG8+Uruvebs20o42Z/iGK4Y4L6+1zKUD3KcDd0=",
+      "GrokBot.wasm": "sha256-+6BKnALkSCp0MztN2mZ+A5r3dATIqo5L/nEslTNlFds=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-s08RvTVJ2BQdbnuxyrUzTNIpbQ5Of7d1fWXeuzqBPBk=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-gWLzDRpFDJwh6DulFQf4yaKb9bm1RwLDHKwIY8J98GM=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-d6tN87QrJstiTMcLaUtZ6TWiNHa8A74Suuzx95thRrE=",
@@ -41,12 +41,12 @@
       "System.Linq.wasm": "sha256-iRiyIXe6Iy9n+IvUAJbugl2/EWJlpRK/RHmmyKPXuqs=",
       "System.Memory.wasm": "sha256-G7F/wCanRtmKQz4zoA4ilK4BASaFFv6fk0sUnhgUOK4=",
       "System.Net.Http.Json.wasm": "sha256-BNWTo3UtLZ7cVrsnnMu5OYZY1UdbZIOZN6Xg399BfBc=",
-      "System.Net.Http.wasm": "sha256-RBRgRGAn5pUevIfGgf0ABKFmNQ3E7eFno0WbPaAPQrs=",
+      "System.Net.Http.wasm": "sha256-YuTQ0DTaHfaUObLiixjzHzkrJEeLZSu5N+Cn1oH7rE8=",
       "System.Net.Primitives.wasm": "sha256-zeYstvdaNz/Ar5k4JRj+jIY2Sip2IJe0uak//n6QnDM=",
       "System.Private.CoreLib.wasm": "sha256-iOfBC+BSrD35/GwzxmRVe3gZiFLzQD7rWsObVMHZGzM=",
       "System.Private.Uri.wasm": "sha256-QYjcuviBfbgYIeGgUgc7Sk8vc/N5oHazXBde0J1o4RQ=",
       "System.Runtime.InteropServices.JavaScript.wasm": "sha256-oW2c7nXVxA0o/sqU/Cv3x11SbRiwcxWnGnnCOaRkZrE=",
-      "System.Runtime.wasm": "sha256-UzvLSaPLfB5I/h1r0I4y7XPudpjevWxEAyGBL+mUlFY=",
+      "System.Runtime.wasm": "sha256-EbHZU913UKwIetIeV+oQVoihl8rvJxJ/8DBcUH/RJ7c=",
       "System.Text.Encodings.Web.wasm": "sha256-6URfVB7NbdkQ/E6UMKjkdn5lNGBCKhisW0LpVUmWLME=",
       "System.Text.Json.wasm": "sha256-4OxYIX6l+jjKdSR4YtPdjtJdn9xb8etmU45r0T9+ELA=",
       "System.Text.RegularExpressions.wasm": "sha256-1A8XAoMOJNMQCRZ6zT4RDK9uC08HLYsFghrDCoGgT9o=",
