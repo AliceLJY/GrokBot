@@ -17,10 +17,10 @@ namespace GrokBot.Services
         {
             _httpClient = httpClient;
             
-            // 从URL获取实际域名
-            string renderUrl = GetRenderUrl();
+            // 使用固定的Render.com URL
+            string renderUrl = "https://grokbot-backend.onrender.com";
             
-            // In development, use local API, in production use dynamic Render.com API
+            // In development, use local API, in production use Render.com API
 #if DEBUG
             _apiUrl = "https://localhost:7001/api/grok/chat";
 #else
@@ -28,22 +28,6 @@ namespace GrokBot.Services
 #endif
 
             Console.WriteLine($"Using API URL: {_apiUrl}");
-        }
-
-        private string GetRenderUrl()
-        {
-            // 默认值 
-            string defaultUrl = "https://grokbot-backend.onrender.com";
-            
-            try
-            {
-                // 可以从窗口位置或任何其他方式确定实际域名
-                return defaultUrl;
-            }
-            catch
-            {
-                return defaultUrl;
-            }
         }
 
         public async Task<string> GetChatResponseAsync(Chat chat)
