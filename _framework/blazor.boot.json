@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "GrokBot",
   "resources": {
-    "hash": "sha256-61g93X9ML+Y1Bsa7oS+tbHlsBzTFEVpCuu5WiSJ7EQM=",
+    "hash": "sha256-MkrfV9Qtnx61IARyJX3vsh/432Egd7Zjb8ma23R6YhY=",
     "jsModuleNative": {
       "dotnet.native.8.0.13.f1wj86lvfk.js": "sha256-xNQsYHtL1vcbrVTHDZAwJM4WovpoyjsrM2C6FQ8cW1w="
     },
@@ -18,7 +18,7 @@
     },
     "assembly": {
       "Blazored.LocalStorage.wasm": "sha256-xHBGFCMjDjvvTwtMvgaMBNmQk9JdVhGmws2/GMZlxrI=",
-      "GrokBot.wasm": "sha256-wfJiHXxlzqZNseNrf4SCGw540sfgojynQwxkS96si6A=",
+      "GrokBot.wasm": "sha256-xlvCLPa/eglqbwjUN5hEFasVCIFca/3Q9Bp6EbzFEMs=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-s08RvTVJ2BQdbnuxyrUzTNIpbQ5Of7d1fWXeuzqBPBk=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-gWLzDRpFDJwh6DulFQf4yaKb9bm1RwLDHKwIY8J98GM=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-d6tN87QrJstiTMcLaUtZ6TWiNHa8A74Suuzx95thRrE=",
