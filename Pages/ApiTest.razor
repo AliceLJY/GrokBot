@@ -1,0 +1,173 @@
+@page "/apitest"
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+
+<h3>API连接测试</h3>
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">API URL</span>
+                <input type="text" class="form-control" @bind="ApiUrl" />
+                <button class="btn btn-primary" @onclick="TestConnection">测试连接</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    连接状态
+                </div>
+                <div class="card-body">
+                    @if (IsTesting)
+                    {
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="@($"alert {(IsConnected ? "alert-success" : "alert-danger")}")">
+                            <strong>状态：</strong> @ConnectionStatus
+                        </div>
+                        
+                        @if (!string.IsNullOrEmpty(Response))
+                        {
+                            <div class="mt-3">
+                                <h5>响应内容：</h5>
+                                <pre class="bg-light p-3 border rounded">@Response</pre>
+                            </div>
+                        }
+                        
+                        @if (!string.IsNullOrEmpty(ErrorMessage))
+                        {
+                            <div class="alert alert-warning mt-3">
+                                <h5>错误信息：</h5>
+                                <pre>@ErrorMessage</pre>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    发送消息测试
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="messageInput" class="form-label">消息内容</label>
+                        <textarea id="messageInput" class="form-control" rows="3" @bind="TestMessage"></textarea>
+                    </div>
+                    <button class="btn btn-primary" @onclick="SendTestMessage">发送测试消息</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string ApiUrl { get; set; } = "https://grokbot-backend.onrender.com/api/test";
+    private string TestMessage { get; set; } = "Hello, this is a test message";
+    private bool IsTesting { get; set; } = false;
+    private bool IsConnected { get; set; } = false;
+    private string ConnectionStatus { get; set; } = "未测试";
+    private string Response { get; set; } = "";
+    private string ErrorMessage { get; set; } = "";
+
+    private async Task TestConnection()
+    {
+        IsTesting = true;
+        IsConnected = false;
+        ConnectionStatus = "正在测试...";
+        Response = "";
+        ErrorMessage = "";
+
+        try
+        {
+            var response = await Http.GetAsync(ApiUrl);
+            
+            IsConnected = response.IsSuccessStatusCode;
+            ConnectionStatus = IsConnected ? "连接成功" : "连接失败";
+            
+            var content = await response.Content.ReadAsStringAsync();
+            Response = content;
+            
+            if (!IsConnected)
+            {
+                ErrorMessage = $"状态码: {(int)response.StatusCode} {response.StatusCode}\n{content}";
+            }
+        }
+        catch (Exception ex)
+        {
+            IsConnected = false;
+            ConnectionStatus = "连接错误";
+            ErrorMessage = $"异常类型: {ex.GetType().Name}\n消息: {ex.Message}";
+            
+            if (ex.InnerException != null)
+            {
+                ErrorMessage += $"\n内部异常: {ex.InnerException.Message}";
+            }
+            
+            // 检测可能是CORS错误
+            if (ex.Message.Contains("CORS") || ex.Message.Contains("cross-origin"))
+            {
+                ErrorMessage += "\n\n可能是CORS跨域问题导致，需要在后端配置允许来自前端的请求。";
+            }
+        }
+        finally
+        {
+            IsTesting = false;
+        }
+    }
+
+    private async Task SendTestMessage()
+    {
+        IsTesting = true;
+        IsConnected = false;
+        ConnectionStatus = "正在发送测试消息...";
+        Response = "";
+        ErrorMessage = "";
+
+        try
+        {
+            var testData = new { message = TestMessage, timestamp = DateTime.Now };
+            var response = await Http.PostAsJsonAsync($"{ApiUrl}/echo", testData);
+            
+            IsConnected = response.IsSuccessStatusCode;
+            ConnectionStatus = IsConnected ? "消息发送成功" : "消息发送失败";
+            
+            var content = await response.Content.ReadAsStringAsync();
+            Response = content;
+            
+            if (!IsConnected)
+            {
+                ErrorMessage = $"状态码: {(int)response.StatusCode} {response.StatusCode}\n{content}";
+            }
+        }
+        catch (Exception ex)
+        {
+            IsConnected = false;
+            ConnectionStatus = "发送错误";
+            ErrorMessage = $"异常类型: {ex.GetType().Name}\n消息: {ex.Message}";
+            
+            if (ex.InnerException != null)
+            {
+                ErrorMessage += $"\n内部异常: {ex.InnerException.Message}";
+            }
+        }
+        finally
+        {
+            IsTesting = false;
+        }
+    }
+}
