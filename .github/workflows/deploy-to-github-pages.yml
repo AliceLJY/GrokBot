@@ -5,6 +5,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -51,7 +54,7 @@ jobs:
           fi
 
       - name: Change base-tag in index.html
-        run: sed -i 's/<base href="\/" \/>/<base href="\/grokbot\/" \/>/g' release/wwwroot/index.html
+        run: sed -i 's/<base href="\/\" \/>/<base href="\/grokbot\/" \/>/g' release/wwwroot/index.html
 
       - name: Add .nojekyll file
         run: touch release/wwwroot/.nojekyll
@@ -61,4 +64,5 @@ jobs:
         with:
           branch: gh-pages
           folder: release/wwwroot
+          token: ${{ secrets.GITHUB_TOKEN }}
           clean: true  # 清理目标分支
