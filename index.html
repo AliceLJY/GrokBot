@@ -10,20 +10,6 @@
     <link href="css/app.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    
-    <!-- 添加处理路由的脚本 -->
-    <script type="text/javascript">
-        // 用于处理来自URL查询参数的路由重定向
-        (function() {
-            var path = window.location.search;
-            if (path && path.startsWith('?')) {
-                var route = path.substring(1);
-                if (route && !route.startsWith('?')) {
-                    history.replaceState(null, '', '/grokbot/' + route);
-                }
-            }
-        })();
-    </script>
 </head>
 
 <body>
