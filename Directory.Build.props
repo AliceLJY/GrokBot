@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <RootNamespace>GrokBot</RootNamespace>
+    <AssemblyName>GrokBot</AssemblyName>
+  </PropertyGroup>
+</Project>
