@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "GrokBot",
   "resources": {
-    "hash": "sha256-hfVwwhaPL4P2Q69ZFX5tZR2TN7EQkB+ZX9TFqyk5Zl4=",
+    "hash": "sha256-KE2bYCVGbyR56dBGf8WTyDelP0Ig3+sKcqiDg5YFjh4=",
     "jsModuleNative": {
       "dotnet.native.8.0.13.f1wj86lvfk.js": "sha256-xNQsYHtL1vcbrVTHDZAwJM4WovpoyjsrM2C6FQ8cW1w="
     },
@@ -18,7 +18,7 @@
     },
     "assembly": {
       "Blazored.LocalStorage.wasm": "sha256-xHBGFCMjDjvvTwtMvgaMBNmQk9JdVhGmws2/GMZlxrI=",
-      "GrokBot.wasm": "sha256-GSQJbmcDJqZ6/hcm/yI0/IdAxW/2ndjxDZ849D+kKg8=",
+      "GrokBot.wasm": "sha256-S9+AyClroFtiarZeDih1uxlqwghFEI5XcV1EW9iLPcM=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-s08RvTVJ2BQdbnuxyrUzTNIpbQ5Of7d1fWXeuzqBPBk=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-gWLzDRpFDJwh6DulFQf4yaKb9bm1RwLDHKwIY8J98GM=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-d6tN87QrJstiTMcLaUtZ6TWiNHa8A74Suuzx95thRrE=",
@@ -41,7 +41,7 @@
       "System.Linq.wasm": "sha256-nSne8PNsFflrlQGD0F4OXlEj292zN3NutUsYLPefA70=",
       "System.Memory.wasm": "sha256-G7F/wCanRtmKQz4zoA4ilK4BASaFFv6fk0sUnhgUOK4=",
       "System.Net.Http.Json.wasm": "sha256-BNWTo3UtLZ7cVrsnnMu5OYZY1UdbZIOZN6Xg399BfBc=",
-      "System.Net.Http.wasm": "sha256-I2G0XBLHCsQJQEyqtR89+ByUcu1NFzqH0Xpy2HVzHPU=",
+      "System.Net.Http.wasm": "sha256-RBRgRGAn5pUevIfGgf0ABKFmNQ3E7eFno0WbPaAPQrs=",
       "System.Net.Primitives.wasm": "sha256-zeYstvdaNz/Ar5k4JRj+jIY2Sip2IJe0uak//n6QnDM=",
       "System.Private.CoreLib.wasm": "sha256-RmXdpR8TPyPrfyxk9vwNU46lSSQpCqz3sn7jN5YxFCU=",
       "System.Private.Uri.wasm": "sha256-QYjcuviBfbgYIeGgUgc7Sk8vc/N5oHazXBde0J1o4RQ=",
