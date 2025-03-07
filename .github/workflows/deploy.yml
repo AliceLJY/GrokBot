@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Restore dependencies
+        run: dotnet restore
+        
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        
+      - name: Publish
+        run: dotnet publish -c Release -o publish
+        
+      - name: Create 404.html
+        run: cp publish/wwwroot/index.html publish/wwwroot/404.html
+        
+      - name: Create .nojekyll file
+        run: touch publish/wwwroot/.nojekyll
+        
+      - name: Fix base path in index.html
+        run: |
+          sed -i 's|<base href="/" />|<base href="/grokbot/" />|g' publish/wwwroot/index.html
+          sed -i 's|<base href="/" />|<base href="/grokbot/" />|g' publish/wwwroot/404.html
+          
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: publish/wwwroot
+          clean: true
