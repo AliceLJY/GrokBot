@@ -1,0 +1,96 @@
+@page "/"
+
+<div class="welcome-container">
+    <div class="welcome-card">
+        <h1>Welcome to GrokBot</h1>
+        <p>Your AI-powered chat assistant using Grok API</p>
+        
+        <div class="features">
+            <div class="feature">
+                <span class="oi oi-chat feature-icon"></span>
+                <h3>Natural Conversations</h3>
+                <p>Chat naturally with GrokBot about anything - from simple questions to complex topics.</p>
+            </div>
+            
+            <div class="feature">
+                <span class="oi oi-clock feature-icon"></span>
+                <h3>Chat History</h3>
+                <p>All your conversations are saved so you can revisit them anytime.</p>
+            </div>
+            
+            <div class="feature">
+                <span class="oi oi-cloud feature-icon"></span>
+                <h3>Powered by Grok</h3>
+                <p>Leveraging the powerful Grok API for intelligent and informative responses.</p>
+            </div>
+        </div>
+        
+        <div class="start-section">
+            <h2>Ready to start chatting?</h2>
+            <a href="/chat/new" class="btn btn-primary start-btn">
+                <span class="oi oi-plus"></span> Start a New Chat
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .welcome-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        padding: 2rem;
+    }
+
+    .welcome-card {
+        max-width: 800px;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        color: #343a40;
+    }
+
+    .features {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+
+    .feature {
+        flex: 1;
+        min-width: 240px;
+        padding: 1.5rem;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        transition: transform 0.3s ease;
+    }
+
+    .feature:hover {
+        transform: translateY(-5px);
+    }
+
+    .feature-icon {
+        font-size: 2rem;
+        color: #007bff;
+        margin-bottom: 1rem;
+    }
+
+    .start-section {
+        margin-top: 3rem;
+    }
+
+    .start-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 1.1rem;
+    }
+</style>

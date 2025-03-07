@@ -1,0 +1,215 @@
+@page "/chat/{ChatId}"
+@using GrokBot.Models
+@using GrokBot.Services
+@using GrokBot.Shared
+@inject ChatStorageService ChatStorage
+@inject GrokService GrokService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<div class="chat-container">
+    @if (currentChat == null)
+    {
+        <div class="loading">
+            <p><em>Loading chat...</em></p>
+        </div>
+    }
+    else
+    {
+        <div class="chat-header">
+            <h2>@currentChat.Title</h2>
+            <div>
+                <button class="btn btn-sm btn-outline-secondary" @onclick="RenameChat" disabled="@isProcessing">
+                    <span class="oi oi-pencil"></span> Rename
+                </button>
+            </div>
+        </div>
+
+        <div class="messages-container" @ref="messagesContainerRef">
+            @if (!currentChat.Messages.Any())
+            {
+                <div class="empty-chat">
+                    <p>Start chatting with GrokBot!</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var message in currentChat.Messages)
+                {
+                    <MessageItem Message="message" />
+                }
+            }
+            
+            @if (isProcessing)
+            {
+                <div class="processing-indicator">
+                    <div class="dot-flashing"></div>
+                    <span>GrokBot is thinking...</span>
+                </div>
+            }
+        </div>
+
+        <div class="chat-input-container">
+            <textarea 
+                @bind="userInput" 
+                @bind:event="oninput" 
+                @onkeydown="HandleKeyDown"
+                class="chat-input" 
+                placeholder="Type your message here..."
+                disabled="@isProcessing"
+                rows="1"></textarea>
+            <button 
+                class="send-button @(string.IsNullOrWhiteSpace(userInput) || isProcessing ? "disabled" : "")" 
+                @onclick="SendMessage"
+                disabled="@(string.IsNullOrWhiteSpace(userInput) || isProcessing)">
+                <span class="oi oi-chevron-right"></span>
+            </button>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string ChatId { get; set; } = string.Empty;
+
+    private Chat? currentChat;
+    private string userInput = string.Empty;
+    private bool isProcessing = false;
+    private ElementReference messagesContainerRef;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadChat();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ChatId != "new" && currentChat?.Id != ChatId)
+        {
+            await LoadChat();
+        }
+    }
+
+    private async Task LoadChat()
+    {
+        if (ChatId == "new")
+        {
+            currentChat = new Chat();
+            await ChatStorage.SaveChatAsync(currentChat);
+            NavigationManager.NavigateTo($"/chat/{currentChat.Id}", replace: true);
+        }
+        else
+        {
+            currentChat = await ChatStorage.GetChatByIdAsync(ChatId);
+            
+            if (currentChat == null)
+            {
+                NavigationManager.NavigateTo("/");
+            }
+        }
+    }
+
+    private async Task SendMessage()
+    {
+        if (string.IsNullOrWhiteSpace(userInput) || isProcessing || currentChat == null)
+            return;
+
+        // Store the message content before clearing the input
+        string messageContent = userInput.Trim();
+        
+        // Clear the input immediately to provide better UX
+        userInput = string.Empty;
+        StateHasChanged();
+        
+        // Add user message
+        var userMessage = new Message
+        {
+            Role = "user",
+            Content = messageContent,
+            Timestamp = DateTime.Now
+        };
+        
+        currentChat.Messages.Add(userMessage);
+        
+        // Update the chat title if it's the first message
+        if (currentChat.Messages.Count == 1)
+        {
+            currentChat.Title = messageContent.Length > 30 
+                ? messageContent.Substring(0, 27) + "..." 
+                : messageContent;
+        }
+        
+        await ChatStorage.SaveChatAsync(currentChat);
+        
+        // Scroll to bottom
+        await ScrollToBottom();
+        
+        // Get response from Grok
+        isProcessing = true;
+        StateHasChanged();
+        
+        try
+        {
+            var response = await GrokService.GetChatResponseAsync(currentChat);
+            
+            // Add bot response
+            var botMessage = new Message
+            {
+                Role = "assistant",
+                Content = response,
+                Timestamp = DateTime.Now
+            };
+            
+            currentChat.Messages.Add(botMessage);
+            await ChatStorage.SaveChatAsync(currentChat);
+        }
+        catch (Exception ex)
+        {
+            // Add error message
+            var errorMessage = new Message
+            {
+                Role = "assistant",
+                Content = $"Sorry, there was an error: {ex.Message}",
+                Timestamp = DateTime.Now
+            };
+            
+            currentChat.Messages.Add(errorMessage);
+            await ChatStorage.SaveChatAsync(currentChat);
+        }
+        finally
+        {
+            isProcessing = false;
+            StateHasChanged();
+            await ScrollToBottom();
+        }
+    }
+
+    private async Task ScrollToBottom()
+    {
+        await Task.Delay(50); // Small delay to ensure DOM update
+        await JSRuntime.InvokeVoidAsync("scrollToBottom", messagesContainerRef);
+    }
+
+    private async Task RenameChat()
+    {
+        if (currentChat == null)
+            return;
+            
+        var newTitle = await JSRuntime.InvokeAsync<string>("prompt", "Enter new chat title:", currentChat.Title);
+        
+        if (!string.IsNullOrWhiteSpace(newTitle))
+        {
+            currentChat.Title = newTitle;
+            await ChatStorage.SaveChatAsync(currentChat);
+        }
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !e.ShiftKey)
+        {
+            // Send on Enter, but allow Shift+Enter for new lines
+            await SendMessage();
+        }
+    }
+}
