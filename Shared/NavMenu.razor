@@ -1,0 +1,166 @@
+@using GrokBot.Models
+@using GrokBot.Services
+@inject ChatStorageService ChatStorage
+@inject NavigationManager NavigationManager
+
+<div class="nav-container">
+    <div class="navbar-brand">
+        <h3>GrokBot</h3>
+        <button class="new-chat-btn" @onclick="CreateNewChat">
+            <span class="oi oi-plus"></span> New Chat
+        </button>
+    </div>
+
+    <div class="chat-list">
+        @if (chats == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else if (!chats.Any())
+        {
+            <p><em>No chats yet. Start a new conversation!</em></p>
+        }
+        else
+        {
+            @foreach (var chat in chats.OrderByDescending(c => c.CreatedAt))
+            {
+                <div class="chat-item @(IsActive(chat.Id) ? "active" : "")" @onclick="() => NavigateToChat(chat.Id)">
+                    <div class="chat-title">@chat.Title</div>
+                    <div class="chat-actions">
+                        <button class="btn btn-sm btn-delete" @onclick="@(e => DeleteChat(chat.Id))">
+                            <span class="oi oi-trash"></span>
+                        </button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private List<Chat>? chats;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadChats();
+    }
+
+    private async Task LoadChats()
+    {
+        chats = await ChatStorage.GetAllChatsAsync();
+    }
+
+    private async Task CreateNewChat()
+    {
+        var newChat = new Chat
+        {
+            Title = $"New Chat {DateTime.Now.ToString("g")}"
+        };
+
+        await ChatStorage.SaveChatAsync(newChat);
+        await LoadChats();
+        NavigateToChat(newChat.Id);
+    }
+
+    private void NavigateToChat(string chatId)
+    {
+        NavigationManager.NavigateTo($"/chat/{chatId}");
+    }
+
+    private async Task DeleteChat(string chatId)
+    {
+        await ChatStorage.DeleteChatAsync(chatId);
+        await LoadChats();
+        
+        // If we're currently viewing the chat that was deleted, go to home
+        var currentPath = NavigationManager.Uri.Split('/').LastOrDefault();
+        if (currentPath == chatId)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private bool IsActive(string chatId)
+    {
+        var url = NavigationManager.Uri;
+        return url.EndsWith($"/chat/{chatId}");
+    }
+}
+
+<style>
+    .nav-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .navbar-brand {
+        padding: 1rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .new-chat-btn {
+        width: 100%;
+        padding: 8px;
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    .new-chat-btn:hover {
+        background-color: #5a6268;
+    }
+
+    .chat-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0.5rem;
+    }
+
+    .chat-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem;
+        border-radius: 4px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        border: 1px solid transparent;
+    }
+
+    .chat-item:hover {
+        background-color: #f1f3f5;
+    }
+
+    .chat-item.active {
+        background-color: #e9ecef;
+        border-color: #ced4da;
+    }
+
+    .chat-title {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .chat-actions {
+        display: flex;
+        gap: 5px;
+    }
+
+    .btn-delete {
+        background: none;
+        border: none;
+        color: #6c757d;
+        cursor: pointer;
+        padding: 2px 5px;
+    }
+
+    .btn-delete:hover {
+        color: #dc3545;
+    }
+</style>
